@@ -22,10 +22,10 @@ class Book {
     private LocalDate publicationDate;
 
     //try without this constructor to see wheter the no-argsconstructor is then necessary
-    Book(String name, String author, String publisher, String publicationDate){
-        this.name=name;
-        this.author=author;
-        this.publisher=publisher;
+    Book(String name, String author, String publisher, String publicationDate) {
+        this.name = name;
+        this.author = author;
+        this.publisher = publisher;
         setPublicationDate(publicationDate);
     }
 
@@ -33,7 +33,7 @@ class Book {
         this.publicationDate=LocalDate.parse(publicationDate);
     }
 
-    public String getPublicationDate(){
+    public String getPublicationDate() {
         return publicationDate.toString();
     }
 

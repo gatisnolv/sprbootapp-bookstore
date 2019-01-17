@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
-public class LoadDatabase {
+class LoadDatabase {
 
     @Bean
     CommandLineRunner initDatabase(BookRepository repository) {

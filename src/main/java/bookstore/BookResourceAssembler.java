@@ -7,7 +7,7 @@ import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BookResourceAssembler implements ResourceAssembler<Book, Resource<Book>> {
+class BookResourceAssembler implements ResourceAssembler<Book, Resource<Book>> {
 
 
     @Override
