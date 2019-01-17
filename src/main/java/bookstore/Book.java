@@ -29,8 +29,8 @@ class Book {
         setPublicationDate(publicationDate);
     }
 
-    public void setPublicationDate(String publicationDate){//TODO address incorrect date exception
-        this.publicationDate=LocalDate.parse(publicationDate);
+    public void setPublicationDate(String publicationDate) {//TODO how can I address incorrect date exception
+        this.publicationDate = LocalDate.parse(publicationDate);
     }
 
     public String getPublicationDate() {

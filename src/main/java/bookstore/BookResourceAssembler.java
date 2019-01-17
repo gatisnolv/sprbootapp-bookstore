@@ -13,7 +13,7 @@ class BookResourceAssembler implements ResourceAssembler<Book, Resource<Book>> {
     @Override
     public Resource<Book> toResource(Book book) {
         return new Resource<>(book,
-                linkTo(methodOn(BookController.class).one(book.getId())).withSelfRel(),
+                linkTo(methodOn(BookController.class).oneById(book.getId())).withSelfRel(),
                 linkTo(methodOn(BookController.class).all()).withRel("books"));
     }
 }
