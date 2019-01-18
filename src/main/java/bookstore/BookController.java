@@ -51,11 +51,36 @@ class BookController {
     @GetMapping("/books/name/{name}")
     Resource<Book> oneByName(@PathVariable String name) {
         Book book = repository.findByName(name);
-        if (book==null){
+        if (book == null) {
             throw new BookNotFoundException(name);
         }
         return assembler.toResource(book);
     }
 
+    @PutMapping("/books/{id}")
+    ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
+        Book updatedBook = repository.findById(id).map(book -> {
+            book.setName(newBook.getName());
+            book.setAuthor(newBook.getAuthor());
+            book.setAuthor(newBook.getAuthor());
+            book.setPublicationDate(newBook.getPublicationDate());
+            return repository.save(book);
+        }).orElseGet(() -> {
+            newBook.setId(id);
+            repository.save(newBook);
+            return repository.save(newBook);
+        });
 
+        Resource<?> resource = assembler.toResource(updatedBook);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
+    }
+
+    @DeleteMapping("/books/{id}")
+    ResponseEntity<?> deleteBook(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
