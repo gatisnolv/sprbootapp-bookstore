@@ -30,11 +30,22 @@ class Book {
     }
 
     public void setPublicationDate(String publicationDate) {//TODO how can I address incorrect date exception
+        if (publicationDate == null) {//fix 6.1.2, but I would rather give an error if all replaced fields ar null
+            this.publicationDate = null;
+            return;
+        }
         this.publicationDate = LocalDate.parse(publicationDate);
     }
 
     public String getPublicationDate() {
+        if (publicationDate == null) {//fix 6.1.2
+            return null;
+        }
         return publicationDate.toString();
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -1,5 +1,6 @@
 package bookstore;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 @RestController
 class BookController {
+
+    private static final String EMPTY_STRING = "";
 
     private final BookRepository repository;
     private final BookResourceAssembler assembler;
@@ -34,6 +37,9 @@ class BookController {
 
     @PostMapping("/books")
     ResponseEntity<?> newBook(@RequestBody Book newBook) throws URISyntaxException {
+        if (allFieldsEmpty(newBook)) {
+            throw new AllFieldsEmptyException();
+        }
         Resource<Book> resource = assembler.toResource(repository.save(newBook));
         return ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
@@ -59,17 +65,17 @@ class BookController {
 
     @PutMapping("/books/{id}")
     ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
+        //TODO check if new book is not only null or empty string values
+        if (allFieldsEmpty(newBook)) {
+            throw new AllFieldsEmptyException();
+        }
         Book updatedBook = repository.findById(id).map(book -> {
             book.setName(newBook.getName());
             book.setAuthor(newBook.getAuthor());
-            book.setAuthor(newBook.getAuthor());
+            book.setPublisher(newBook.getPublisher());
             book.setPublicationDate(newBook.getPublicationDate());
             return repository.save(book);
-        }).orElseGet(() -> {
-            newBook.setId(id);
-            repository.save(newBook);
-            return repository.save(newBook);
-        });
+        }).orElseThrow(() -> new BookNotFoundException(id));
 
         Resource<?> resource = assembler.toResource(updatedBook);
 
@@ -80,7 +86,25 @@ class BookController {
 
     @DeleteMapping("/books/{id}")
     ResponseEntity<?> deleteBook(@PathVariable Long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new BookNotFoundException(id);
+        }
         return ResponseEntity.noContent().build();
+    }
+
+    private boolean allFieldsEmpty(Book book) {
+        String name = book.getName();
+        String author = book.getAuthor();
+        String publisher = book.getPublisher();
+        String publicationDate = book.getPublicationDate();
+        if ((name == null || name.equals(EMPTY_STRING))
+                && (author == null || author.equals(EMPTY_STRING))
+                && (publisher == null || publisher.equals(EMPTY_STRING))
+                && (publicationDate == null || publicationDate.equals(EMPTY_STRING))) {
+            return true;
+        }
+        return false;
     }
 }
