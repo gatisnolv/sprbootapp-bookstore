@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @Entity
 class Book {
 
+    private static final String EMPTY_STRING = "";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -20,8 +22,9 @@ class Book {
     private String author;
     private String publisher;
     private LocalDate publicationDate;
+    private boolean publicationDateIsEmptyString;
 
-    //try without this constructor to see wheter the no-argsconstructor is then necessary
+    //try without this constructor to see whether the no-args constructor is then necessary
     Book(String name, String author, String publisher, String publicationDate) {
         this.name = name;
         this.author = author;
@@ -31,21 +34,34 @@ class Book {
 
     public void setPublicationDate(String publicationDate) {//TODO how can I address incorrect date exception
         if (publicationDate == null) {//fix 6.1.2, but I would rather give an error if all replaced fields ar null
+            publicationDateIsEmptyString = false;
             this.publicationDate = null;
             return;
+        } else if (publicationDate.equals(EMPTY_STRING)) {
+            publicationDateIsEmptyString = true;
+            return;
         }
+        publicationDateIsEmptyString = false;
         this.publicationDate = LocalDate.parse(publicationDate);
     }
 
     public String getPublicationDate() {
-        if (publicationDate == null) {//fix 6.1.2
+        if (publicationDateIsEmptyString) {//fix 6.1.2
+            return EMPTY_STRING;
+        } else if (publicationDate == null) {
             return null;
         }
         return publicationDate.toString();
     }
 
-
-    public void setName(String name) {
-        this.name = name;
+    public boolean allFieldsEmpty() {
+        if ((this.name == null || this.name.equals(EMPTY_STRING))
+                && (this.author == null || this.author.equals(EMPTY_STRING))
+                && (this.publisher == null || this.publisher.equals(EMPTY_STRING))
+                && (this.publicationDate == null || isPublicationDateIsEmptyString())) {
+            return true;
+        }
+        return false;
     }
+
 }

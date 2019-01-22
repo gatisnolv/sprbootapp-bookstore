@@ -16,8 +16,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 @RestController
 class BookController {
 
-    private static final String EMPTY_STRING = "";
-
     private final BookRepository repository;
     private final BookResourceAssembler assembler;
 
@@ -37,7 +35,7 @@ class BookController {
 
     @PostMapping("/books")
     ResponseEntity<?> newBook(@RequestBody Book newBook) throws URISyntaxException {
-        if (allFieldsEmpty(newBook)) {
+        if (newBook.allFieldsEmpty()) {
             throw new AllFieldsEmptyException();
         }
         Resource<Book> resource = assembler.toResource(repository.save(newBook));
@@ -66,7 +64,7 @@ class BookController {
     @PutMapping("/books/{id}")
     ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
         //TODO check if new book is not only null or empty string values
-        if (allFieldsEmpty(newBook)) {
+        if (newBook.allFieldsEmpty()) {
             throw new AllFieldsEmptyException();
         }
         Book updatedBook = repository.findById(id).map(book -> {
@@ -94,17 +92,4 @@ class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    private boolean allFieldsEmpty(Book book) {
-        String name = book.getName();
-        String author = book.getAuthor();
-        String publisher = book.getPublisher();
-        String publicationDate = book.getPublicationDate();
-        if ((name == null || name.equals(EMPTY_STRING))
-                && (author == null || author.equals(EMPTY_STRING))
-                && (publisher == null || publisher.equals(EMPTY_STRING))
-                && (publicationDate == null || publicationDate.equals(EMPTY_STRING))) {
-            return true;
-        }
-        return false;
-    }
 }
