@@ -1,9 +1,12 @@
 package bookstore;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringRunner.class)
 public class BookNotFoundExceptionTest {
 
     @Test
@@ -21,4 +24,5 @@ public class BookNotFoundExceptionTest {
         Exception e = new BookNotFoundException(name);
         assertEquals(message, e.getMessage());
     }
+
 }
