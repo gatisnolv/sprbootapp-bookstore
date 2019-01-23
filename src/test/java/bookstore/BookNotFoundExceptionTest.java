@@ -20,7 +20,7 @@ public class BookNotFoundExceptionTest {
     @Test
     public void testName() {
         String name = "Test Name";
-        String message = "Could not find book with name: '" + name + "'";
+        String message = "Could not find book with title: '" + name + "'";
         Exception e = new BookNotFoundException(name);
         assertEquals(message, e.getMessage());
     }
