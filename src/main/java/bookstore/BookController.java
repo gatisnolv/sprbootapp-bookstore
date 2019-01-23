@@ -25,16 +25,16 @@ class BookController {
     }
 
     //Aggregate root
-    @GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
-    Resources<Resource<Book>> all() {
+    @GetMapping(value = "/books", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+    Resources<Resource<Book>> getAllBooks() {
         List<Resource<Book>> books = repository.findAll().stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
-        return new Resources<>(books, linkTo(methodOn(BookController.class).all()).withSelfRel());
+        return new Resources<>(books, linkTo(methodOn(BookController.class).getAllBooks()).withSelfRel());
     }
 
     @PostMapping("/books")
-    ResponseEntity<?> newBook(@RequestBody Book newBook) throws URISyntaxException {
+    ResponseEntity<?> postNewBook(@RequestBody Book newBook) throws URISyntaxException {
         if (newBook.allFieldsEmpty()) {
             throw new AllFieldsEmptyException();
         }
@@ -46,32 +46,32 @@ class BookController {
 
     //Single item
     @GetMapping("/books/{id}")
-    Resource<Book> oneById(@PathVariable Long id) {
+    Resource<Book> getOneBookById(@PathVariable Long id) {
         Book book = repository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));//TODO create custom exception
+                .orElseThrow(() -> new BookNotFoundException(id));
         return assembler.toResource(book);
     }
 
-    @GetMapping("/books/name/{name}")
-    Resource<Book> oneByName(@PathVariable String name) {
-        Book book = repository.findByName(name);
+    @GetMapping("/books/title/{title}")
+    Resource<Book> getOneBookByTitle(@PathVariable String title) {
+        Book book = repository.findByTitle(title);
         if (book == null) {
-            throw new BookNotFoundException(name);
+            throw new BookNotFoundException(title);
         }
         return assembler.toResource(book);
     }
 
     @PutMapping("/books/{id}")
-    ResponseEntity<?> replaceBook(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
-        //TODO check if new book is not only null or empty string values
+    ResponseEntity<?> replaceBookById(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
         if (newBook.allFieldsEmpty()) {
             throw new AllFieldsEmptyException();
         }
         Book updatedBook = repository.findById(id).map(book -> {
-            book.setName(newBook.getName());
+            book.setTitle(newBook.getTitle());
             book.setAuthor(newBook.getAuthor());
             book.setPublisher(newBook.getPublisher());
             book.setPublicationDate(newBook.getPublicationDate());
+            newBook.setId(id);//relevant for testing with 'actual' (preloaded) database
             return repository.save(book);
         }).orElseThrow(() -> new BookNotFoundException(id));
 
@@ -83,7 +83,7 @@ class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    ResponseEntity<?> deleteBook(@PathVariable Long id) {
+    ResponseEntity<?> deleteBookById(@PathVariable Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

@@ -6,6 +6,6 @@ import org.springframework.data.repository.query.Param;
 
 interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("select book from Book book where LOWER(book.name) = LOWER(:name)")
-    Book findByName(@Param("name") String name);
+    @Query("select book from Book book where LOWER(book.title) = LOWER(:title)")
+    Book findByTitle(@Param("title") String title);
 }
