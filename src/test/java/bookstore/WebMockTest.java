@@ -64,11 +64,11 @@ public class WebMockTest {
     private BookResourceAssembler assembler;
 
     @Test
-    public void getAllBooks() throws Exception {//FIXME figure out how to check values ar not-null using the [*] in json path
-//        book1.setId(1L);
-//        book2.setId(2L);
-//        book3.setId(3L);
-        List bookList = new LinkedList<Book>();
+    public void getAllBooks() throws Exception {
+        book1.setId(1L);
+        book2.setId(2L);
+        book3.setId(3L);
+        List<Book> bookList = new LinkedList<>();
         bookList.add(book1);
         bookList.add(book2);
         bookList.add(book3);
@@ -79,8 +79,13 @@ public class WebMockTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX).exists())
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_ID).value(Matchers.nullValue()))
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX).value(hasSize(3)))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_ID).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_TITLE).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_AUTHOR).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLISHER).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))))
+
         ;
     }
 
