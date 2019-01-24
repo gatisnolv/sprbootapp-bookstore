@@ -84,9 +84,7 @@ public class WebMockTest {
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_TITLE).value(not(hasItem(nullValue()))))
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_AUTHOR).value(not(hasItem(nullValue()))))
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLISHER).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))))
-
-        ;
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))));
     }
 
     @Test
@@ -97,9 +95,9 @@ public class WebMockTest {
 
         when(repository.save(book)).thenReturn(book);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
-//                .accept(MediaTypes.HAL_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(book))
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(book))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -115,9 +113,8 @@ public class WebMockTest {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(null, null, null, null);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
-//                .accept(MediaTypes.HAL_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(book))
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(book))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -154,7 +151,9 @@ public class WebMockTest {
     public void getOneExistingByTitle() throws Exception {
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         when(repository.findByTitleIgnoreCase(EXISTING_TITLE)).thenReturn(book);
-        mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + EXISTING_TITLE))
+        mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + EXISTING_TITLE)
+                .accept(MediaTypes.HAL_JSON_UTF8)
+        )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + FIELD_TITLE).value(TITLE))
@@ -181,7 +180,9 @@ public class WebMockTest {
         when(repository.save(book)).thenReturn(book);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON_UTF8)
+        )
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + FIELD_ID).value(EXISTING_ID))
@@ -198,7 +199,8 @@ public class WebMockTest {
         when(repository.findById(NONEXISTING_ID)).thenReturn(Optional.empty());
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + NONEXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(String.format(BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, FIELD_ID) + NONEXISTING_ID));
@@ -210,7 +212,8 @@ public class WebMockTest {
         Book book = new Book(null, null, null, null);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE));
@@ -220,7 +223,8 @@ public class WebMockTest {
     public void deleteExisting() throws Exception {
         mockMvc.perform(delete(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(isEmptyString()));
 
     }
 
