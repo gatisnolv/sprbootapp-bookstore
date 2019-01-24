@@ -47,14 +47,14 @@ class BookController {
     }
 
     //Single item
-    @GetMapping("/books/{id}")
+    @GetMapping(value = "/books/{id}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
     Resource<Book> getOneBookById(@PathVariable Long id) {
         Book book = repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         return assembler.toResource(book);
     }
 
-    @GetMapping("/books/title/{title}")
+    @GetMapping(value = "/books/title/{title}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
     Resource<Book> getOneBookByTitle(@PathVariable String title) {
         Book book = repository.findByTitleIgnoreCase(title);
         if (book == null) {
