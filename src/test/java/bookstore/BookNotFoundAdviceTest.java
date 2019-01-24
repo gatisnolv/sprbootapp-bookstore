@@ -12,7 +12,7 @@ public class BookNotFoundAdviceTest {
     @Test
     public void test() {
         BookNotFoundAdvice advice = new BookNotFoundAdvice();
-        Long id = new Long(7);
+        Long id = 7L;
         String message = "Could not find book with id: " + id;
         BookNotFoundException e = new BookNotFoundException(id);
         assertEquals(message, advice.bookNotFoundHandler(e));

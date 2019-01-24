@@ -38,8 +38,7 @@ public class BookControllerTest {
     public void getAllBooks() {
         Resources<Resource<Book>> resources = controller.getAllBooks();
         for (Resource<Book> resource : resources.getContent()) {
-            assertTrue(resource instanceof Resource<?>);
-            assertTrue(resource.getContent() instanceof Book);
+            assertNotNull(resource);
         }
         assertEquals(AGGREGATE_ROOT_INFIX, resources.getLink(SELF_LINK).getHref());
     }
@@ -49,7 +48,7 @@ public class BookControllerTest {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         ResponseEntity<?> responseEntity = controller.postNewBook(newBook);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assert (responseEntity.toString().contains(newBook.toString()));
+        assertTrue(responseEntity.toString().contains(newBook.toString()));
     }
 
     @Test
@@ -57,7 +56,7 @@ public class BookControllerTest {
         try {
             controller.postNewBook(new Book(null, null, null, null));
         } catch (RuntimeException e) {
-            assert (e instanceof AllFieldsEmptyException);
+            assertTrue(e instanceof AllFieldsEmptyException);
         }
     }
 
@@ -72,7 +71,7 @@ public class BookControllerTest {
         try {
             controller.getOneBookById(NONEXISTING_ID);
         } catch (RuntimeException e) {
-            assert (e instanceof BookNotFoundException);
+            assertTrue(e instanceof BookNotFoundException);
         }
     }
 
@@ -87,7 +86,7 @@ public class BookControllerTest {
         try {
             controller.getOneBookByTitle(NONEXISTING_TITLE);
         } catch (RuntimeException e) {
-            assert (e instanceof BookNotFoundException);
+            assertTrue(e instanceof BookNotFoundException);
         }
     }
 
@@ -102,7 +101,7 @@ public class BookControllerTest {
         try {
             controller.replaceBookById(new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE), NONEXISTING_ID);
         } catch (RuntimeException e) {
-            assert (e instanceof BookNotFoundException);
+            assertTrue(e instanceof BookNotFoundException);
         }
     }
 
@@ -111,7 +110,7 @@ public class BookControllerTest {
         try {
             controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID);
         } catch (RuntimeException e) {
-            assert (e instanceof AllFieldsEmptyException);
+            assertTrue(e instanceof AllFieldsEmptyException);
         }
     }
 
@@ -126,7 +125,7 @@ public class BookControllerTest {
         try {
             controller.deleteBookById(NONEXISTING_ID);
         } catch (RuntimeException e) {
-            assert (e instanceof BookNotFoundException);
+            assertTrue(e instanceof BookNotFoundException);
         }
     }
 

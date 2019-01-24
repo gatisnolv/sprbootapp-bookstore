@@ -11,7 +11,7 @@ public class BookNotFoundExceptionTest {
 
     @Test
     public void testId() {
-        Long id = new Long(7);
+        Long id = 7L;
         String message = "Could not find book with id: " + id;
         Exception e = new BookNotFoundException(id);
         assertEquals(message, e.getMessage());

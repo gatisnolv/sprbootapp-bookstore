@@ -30,11 +30,9 @@ public class WebMockTest {
 
     private static final String AGGREGATE_ROOT_INFIX = "/books";
     private static final String FIND_BY_TITLE_INFIX = "/title";
-    private static final String SELF_LINK = "self";
     private static final Long EXISTING_ID = 1L;
     private static final Long NONEXISTING_ID = 10L;
     private static final String EXISTING_TITLE = "1984";
-    //    private static final String NONEXISTING_TITLE = "2000";
     private static final String NONEXISTING_TITLE = "Non Existing";
     private static final String TITLE = "Metropolis";
     private static final String AUTHOR = "Thea von Harbou";
@@ -51,7 +49,6 @@ public class WebMockTest {
     private static final String JSON_PATH_ROOT_PREFIX = "$.";
     private static final String JSON_BOOKLIST_PATH_INFIX = "_embedded.bookList";
     private static final String JSON_AGGREGATE_ACCESSOR_INFIX = "[*].";
-
 
     private static final Book book1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
     private static final Book book2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
@@ -119,7 +116,7 @@ public class WebMockTest {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(String.format(ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE)));
+                .andExpect(content().string(ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE));
     }
 
     @Test
