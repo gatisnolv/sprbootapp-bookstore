@@ -31,7 +31,16 @@ class Book {
         setPublicationDate(publicationDate);
     }
 
-    public void setPublicationDate(String publicationDate) {//TODO q: how can I address incorrect date exception
+    Book(Book book) {
+        this.id = new Long(book.id);
+        this.title = book.title;
+        this.author = book.author;
+        this.publisher = book.publisher;
+        this.publicationDate = book.publicationDate;
+        this.publicationDateIsEmptyString = book.publicationDateIsEmptyString;
+    }
+
+    public void setPublicationDate(String publicationDate) {//TODO q: how can I address incorrect date (format or impossible date) exception
         if (publicationDate == null) {
             publicationDateIsEmptyString = false;
             this.publicationDate = null;
@@ -54,13 +63,10 @@ class Book {
     }
 
     public boolean allFieldsEmpty() {
-        if ((this.title == null || this.title.equals(EMPTY_STRING))
+        return ((this.title == null || this.title.equals(EMPTY_STRING))
                 && (this.author == null || this.author.equals(EMPTY_STRING))
                 && (this.publisher == null || this.publisher.equals(EMPTY_STRING))
-                && (this.publicationDate == null || isPublicationDateIsEmptyString())) {
-            return true;
-        }
-        return false;
+                && (this.publicationDate == null || isPublicationDateIsEmptyString()));
     }
 
 }

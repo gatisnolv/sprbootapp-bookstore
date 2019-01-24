@@ -10,6 +10,19 @@ import static org.junit.Assert.*;
 public class BookTest {
 
     @Test
+    public void testCopyConstructor() {
+        Book book = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
+        book.setId(1L);
+        Book copy = new Book(book);
+        assertEquals(book.getId(), copy.getId());
+        assertEquals(book.getTitle(), copy.getTitle());
+        assertEquals(book.getAuthor(), copy.getAuthor());
+        assertEquals(book.getPublisher(), copy.getPublisher());
+        assertEquals(book.getPublicationDate(), copy.getPublicationDate());
+        assertEquals(book.isPublicationDateIsEmptyString(), copy.isPublicationDateIsEmptyString());
+    }
+
+    @Test
     public void testNonNullGetPubLicationDate() {
         String date = "1949-06-08";
         Book book = new Book("1984", "George Orwell", "Secker & Warburg", date);
