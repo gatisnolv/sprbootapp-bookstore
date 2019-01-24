@@ -151,7 +151,7 @@ public class WebMockTest {
     @Test
     public void getOneExistingByTitle() throws Exception {
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        when(repository.findByTitle(EXISTING_TITLE)).thenReturn(book);
+        when(repository.findByTitleIgnoreCase(EXISTING_TITLE)).thenReturn(book);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + EXISTING_TITLE))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -163,7 +163,7 @@ public class WebMockTest {
 
     @Test
     public void getOneNonExistingByTitle() throws Exception {
-        when(repository.findByTitle(NONEXISTING_TITLE)).thenReturn(null);
+        when(repository.findByTitleIgnoreCase(NONEXISTING_TITLE)).thenReturn(null);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + NONEXISTING_TITLE))
                 .andDo(print())
                 .andExpect(status().isNotFound())

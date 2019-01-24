@@ -56,7 +56,7 @@ class BookController {
 
     @GetMapping("/books/title/{title}")
     Resource<Book> getOneBookByTitle(@PathVariable String title) {
-        Book book = repository.findByTitle(title);
+        Book book = repository.findByTitleIgnoreCase(title);
         if (book == null) {
             throw new BookNotFoundException(title);
         }
