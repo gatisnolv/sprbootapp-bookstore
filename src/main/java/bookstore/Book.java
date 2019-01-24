@@ -1,7 +1,6 @@
 package bookstore;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +21,8 @@ class Book {
     private String author;
     private String publisher;
     private LocalDate publicationDate;
+    @Getter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.NONE)
     private boolean publicationDateIsEmptyString;
 
     Book(String title, String author, String publisher, String publicationDate) {
