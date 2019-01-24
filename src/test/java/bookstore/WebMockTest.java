@@ -50,9 +50,9 @@ public class WebMockTest {
     private static final String JSON_BOOKLIST_PATH_INFIX = "_embedded.bookList";
     private static final String JSON_AGGREGATE_ACCESSOR_INFIX = "[*].";
 
-    private static final Book book1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
-    private static final Book book2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
-    private static final Book book3 = new Book("Animal Farm", "George Orwell", "Secker & Warburg", "1945-08-17");
+    private static final Book BOOK_1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
+    private static final Book BOOK_2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
+    private static final Book BOOK_3 = new Book("Animal Farm", "George Orwell", "Secker & Warburg", "1945-08-17");
 
     @Autowired
     private MockMvc mockMvc;
@@ -65,13 +65,13 @@ public class WebMockTest {
 
     @Test
     public void getAllBooks() throws Exception {
-        book1.setId(1L);
-        book2.setId(2L);
-        book3.setId(3L);
+        BOOK_1.setId(1L);
+        BOOK_2.setId(2L);
+        BOOK_3.setId(3L);
         List<Book> bookList = new LinkedList<>();
-        bookList.add(book1);
-        bookList.add(book2);
-        bookList.add(book3);
+        bookList.add(BOOK_1);
+        bookList.add(BOOK_2);
+        bookList.add(BOOK_3);
         when(repository.findAll()).thenReturn(bookList);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + "/")
                 .accept(MediaTypes.HAL_JSON_UTF8)
