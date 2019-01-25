@@ -44,7 +44,7 @@ public class WebMockTest {
     private static final String FIELD_PUBLISHER = "publisher";
     private static final String FIELD_PUBLICATION_DATE = "publicationDate";
     private static final String BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE = "Could not find book with %s: ";
-    private static final String ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE = "All fields were missing/empty, the entry was not saved";
+    private static final String ALL_FIELDS_NULL_EXCEPTION_MESSAGE = "All fields were missing/null, the entry was not saved";
     private static final String PARENTHESIZE_TITLE_TEMPLATE = "'%s'";
     private static final String JSON_PATH_ROOT_PREFIX = "$.";
     private static final String JSON_BOOKLIST_PATH_INFIX = "_embedded.bookList";
@@ -88,7 +88,7 @@ public class WebMockTest {
     }
 
     @Test
-    public void postBookWithNonEmptyFields() throws Exception {
+    public void postBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         book.setId(NONEXISTING_ID);//TODO q: is this the best place for this?
@@ -109,7 +109,7 @@ public class WebMockTest {
     }
 
     @Test
-    public void postBookWithEmptyFields() throws Exception {
+    public void postBookWithNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(null, null, null, null);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
@@ -118,7 +118,7 @@ public class WebMockTest {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE));
+                .andExpect(content().string(ALL_FIELDS_NULL_EXCEPTION_MESSAGE));
     }
 
     @Test
@@ -172,7 +172,7 @@ public class WebMockTest {
     }
 
     @Test
-    public void replaceBookWithNonEmptyFields() throws Exception {
+    public void replaceBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         book.setId(EXISTING_ID);
@@ -193,7 +193,7 @@ public class WebMockTest {
     }
 
     @Test
-    public void replaceNonExistingBookWithNonEmptyFields() throws Exception {
+    public void replaceNonExistingBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         when(repository.findById(NONEXISTING_ID)).thenReturn(Optional.empty());
@@ -207,7 +207,7 @@ public class WebMockTest {
     }
 
     @Test
-    public void replaceBookWithEmptyFields() throws Exception {
+    public void replaceBookWithAllNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(null, null, null, null);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
@@ -216,7 +216,7 @@ public class WebMockTest {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(ALL_FIELDS_EMPTY_EXCEPTION_MESSAGE));
+                .andExpect(content().string(ALL_FIELDS_NULL_EXCEPTION_MESSAGE));
     }
 
     @Test

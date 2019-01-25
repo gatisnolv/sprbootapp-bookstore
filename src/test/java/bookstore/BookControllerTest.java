@@ -68,7 +68,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void postBookWithNonEmptyFields() throws URISyntaxException {
+    public void postBookWithNonNullFields() throws URISyntaxException {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         newBook.setId(NEW_ID);
         ResponseEntity<?> responseEntity = controller.postNewBook(newBook);
@@ -80,11 +80,11 @@ public class BookControllerTest {
     }
 
     @Test
-    public void postBookWithEmptyFields() throws URISyntaxException {
+    public void postBookWithAllNullFields() throws URISyntaxException {
         try {
             controller.postNewBook(new Book(null, null, null, null));
         } catch (RuntimeException e) {
-            assertTrue(e instanceof AllFieldsEmptyException);
+            assertTrue(e instanceof AllFieldsNullException);
         }
     }
 
@@ -128,7 +128,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void replaceBookWithNonEmptyFields() throws URISyntaxException {
+    public void replaceBookWithNonNullFields() throws URISyntaxException {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
@@ -139,7 +139,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void replaceNonExistingBookWithNonEmptyFields() throws URISyntaxException {
+    public void replaceNonExistingBookWithNonNullFields() throws URISyntaxException {
         try {
             controller.replaceBookById(new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE), NONEXISTING_ID);
         } catch (RuntimeException e) {
@@ -148,11 +148,11 @@ public class BookControllerTest {
     }
 
     @Test
-    public void replaceBookWithEmptyFields() throws URISyntaxException {
+    public void replaceBookWithNullFields() throws URISyntaxException {
         try {
             controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID);
         } catch (RuntimeException e) {
-            assertTrue(e instanceof AllFieldsEmptyException);
+            assertTrue(e instanceof AllFieldsNullException);
         }
     }
 

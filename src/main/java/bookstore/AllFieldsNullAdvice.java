@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-class AllFieldsEmptyAdvice {
+class AllFieldsNullAdvice {
+
     @ResponseBody
-    @ExceptionHandler(AllFieldsEmptyException.class)
+    @ExceptionHandler(AllFieldsNullException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String allFieldsEmptyHandler(AllFieldsEmptyException x) {
+    String allFieldsNullHandler(AllFieldsNullException x) {
         return x.getMessage();
     }
 

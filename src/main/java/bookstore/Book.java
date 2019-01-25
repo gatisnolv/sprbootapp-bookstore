@@ -1,6 +1,7 @@
 package bookstore;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,9 +22,6 @@ class Book {
     private String author;
     private String publisher;
     private LocalDate publicationDate;
-    @Getter(AccessLevel.PACKAGE)
-    @Setter(AccessLevel.NONE)
-    private boolean publicationDateIsEmptyString;
 
     Book(String title, String author, String publisher, String publicationDate) {
         this.title = title;
@@ -38,36 +36,25 @@ class Book {
         this.author = book.author;
         this.publisher = book.publisher;
         this.publicationDate = book.publicationDate;
-        this.publicationDateIsEmptyString = book.publicationDateIsEmptyString;
     }
 
     public void setPublicationDate(String publicationDate) {//TODO q: how can I address incorrect date (format or impossible date) exception
         if (publicationDate == null) {
-            publicationDateIsEmptyString = false;
             this.publicationDate = null;
             return;
-        } else if (publicationDate.equals(EMPTY_STRING)) {
-            publicationDateIsEmptyString = true;
-            return;
         }
-        publicationDateIsEmptyString = false;
         this.publicationDate = LocalDate.parse(publicationDate);
     }
 
     public String getPublicationDate() {
-        if (publicationDateIsEmptyString) {
-            return EMPTY_STRING;
-        } else if (publicationDate == null) {
+        if (publicationDate == null) {
             return null;
         }
         return publicationDate.toString();
     }
 
-    public boolean allFieldsEmpty() {
-        return ((this.title == null || this.title.equals(EMPTY_STRING))
-                && (this.author == null || this.author.equals(EMPTY_STRING))
-                && (this.publisher == null || this.publisher.equals(EMPTY_STRING))
-                && (this.publicationDate == null || isPublicationDateIsEmptyString()));
+    public boolean allFieldsNull() {
+        return title == null && author == null && publisher == null && publicationDate == null;
     }
 
 }

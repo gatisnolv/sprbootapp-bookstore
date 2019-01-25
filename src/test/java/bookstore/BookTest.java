@@ -29,19 +29,11 @@ public class BookTest {
         assertEquals(book.getAuthor(), copy.getAuthor());
         assertEquals(book.getPublisher(), copy.getPublisher());
         assertEquals(book.getPublicationDate(), copy.getPublicationDate());
-        assertEquals(book.isPublicationDateIsEmptyString(), copy.isPublicationDateIsEmptyString());
     }
 
     @Test
     public void testNonNullGetPubLicationDate() {
         String date = "1949-06-08";
-        Book book = new Book("1984", "George Orwell", "Secker & Warburg", date);
-        assertEquals(date, book.getPublicationDate());
-    }
-
-    @Test
-    public void testEmptyStringGetPubLicationDate() {
-        String date = "";
         Book book = new Book("1984", "George Orwell", "Secker & Warburg", date);
         assertEquals(date, book.getPublicationDate());
     }
@@ -54,21 +46,15 @@ public class BookTest {
     }
 
     @Test
-    public void testAllFieldsEmpty1() {
+    public void testAllFieldsNull() {
         Book book = new Book(null, null, null, null);
-        assertTrue(book.allFieldsEmpty());
+        assertTrue(book.allFieldsNull());
     }
 
     @Test
-    public void testAllFieldsEmpty2() {
-        Book book = new Book("", "", "", "");
-        assertTrue(book.allFieldsEmpty());
-    }
-
-    @Test
-    public void testAllFieldsEmpty3() {
+    public void testNotAllFieldsNull() {
         Book book = new Book(null, null, null, "1984-01-01");
-        assertFalse(book.allFieldsEmpty());
+        assertFalse(book.allFieldsNull());
     }
 
 }

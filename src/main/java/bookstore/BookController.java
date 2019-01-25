@@ -37,8 +37,8 @@ class BookController {
 
     @PostMapping("/books")
     ResponseEntity<?> postNewBook(@RequestBody Book newBook) throws URISyntaxException {
-        if (newBook.allFieldsEmpty()) {
-            throw new AllFieldsEmptyException();
+        if (newBook.allFieldsNull()) {
+            throw new AllFieldsNullException();
         }
         Resource<Book> resource = assembler.toResource(repository.save(newBook));
         return ResponseEntity
@@ -65,8 +65,8 @@ class BookController {
 
     @PutMapping("/books/{id}")
     ResponseEntity<?> replaceBookById(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
-        if (newBook.allFieldsEmpty()) {
-            throw new AllFieldsEmptyException();
+        if (newBook.allFieldsNull()) {
+            throw new AllFieldsNullException();
         }
         Book updatedBook = repository.findById(id).map(book -> {
             book.setTitle(newBook.getTitle());
