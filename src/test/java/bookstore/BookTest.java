@@ -10,6 +10,16 @@ import static org.junit.Assert.*;
 public class BookTest {
 
     @Test
+    public void testNoArgsConstructor() {
+        Book book = new Book();
+        assertNull(book.getId());
+        assertNull(book.getTitle());
+        assertNull(book.getAuthor());
+        assertNull(book.getPublisher());
+        assertNull(book.getPublicationDate());
+    }
+
+    @Test
     public void testCopyConstructor() {
         Book book = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
         book.setId(1L);
