@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -59,7 +58,7 @@ public class BookControllerTest {
         assertEquals(AGGREGATE_ROOT_INFIX, resources.getLink(SELF_REL_NAME).getHref());
         Iterator<Resource<Book>> iterator = resources.getContent().iterator();
         System.out.println(resources);
-        for (Long i = 0L; i < resources.getContent().size(); i++) {
+        for (Long i = 0L; i < existingBooks.size(); i++) {
             Resource<Book> resource = iterator.next();
             assertEquals(existingBooks.get(i.intValue()), resource.getContent());
             assertEquals(String.format(SELF_REL_TEMPLATE, i + 1), resource.getLink(SELF_REL_NAME).getHref());
@@ -74,6 +73,7 @@ public class BookControllerTest {
         ResponseEntity<?> responseEntity = controller.postNewBook(newBook);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
+        assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, NEW_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
@@ -130,11 +130,12 @@ public class BookControllerTest {
     @Test
     public void replaceBookWithNonNullFields() throws URISyntaxException {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID);
+        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID_2);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
+        assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID_2), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
@@ -150,7 +151,7 @@ public class BookControllerTest {
     @Test
     public void replaceBookWithNullFields() throws URISyntaxException {
         try {
-            controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID);
+            controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID_2);
         } catch (RuntimeException e) {
             assertTrue(e instanceof AllFieldsNullException);
         }
