@@ -14,4 +14,5 @@ class AllFieldsEmptyAdvice {
     String allFieldsEmptyHandler(AllFieldsEmptyException x) {
         return x.getMessage();
     }
+
 }

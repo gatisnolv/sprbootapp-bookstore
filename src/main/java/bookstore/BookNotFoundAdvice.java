@@ -15,4 +15,5 @@ class BookNotFoundAdvice {
     String bookNotFoundHandler(BookNotFoundException bx) {
         return bx.getMessage();
     }
+
 }

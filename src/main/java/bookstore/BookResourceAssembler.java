@@ -16,4 +16,5 @@ class BookResourceAssembler implements ResourceAssembler<Book, Resource<Book>> {
                 linkTo(methodOn(BookController.class).getOneBookById(book.getId())).withSelfRel(),
                 linkTo(methodOn(BookController.class).getAllBooks()).withRel("books"));
     }
+
 }
