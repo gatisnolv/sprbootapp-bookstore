@@ -73,7 +73,6 @@ class BookController {
             book.setAuthor(newBook.getAuthor());
             book.setPublisher(newBook.getPublisher());
             book.setPublicationDate(newBook.getPublicationDate());
-            newBook.setId(id);//relevant for testing with 'actual' (preloaded) database
             return repository.save(book);
         }).orElseThrow(() -> new BookNotFoundException(id));
 
