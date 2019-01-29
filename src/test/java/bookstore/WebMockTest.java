@@ -91,8 +91,7 @@ public class WebMockTest {
     public void postBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        book.setId(NONEXISTING_ID);//TODO q: is this the best place for this?
-
+        book.setId(NONEXISTING_ID);
         when(repository.save(book)).thenReturn(book);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
                 .accept(MediaTypes.HAL_JSON_UTF8)

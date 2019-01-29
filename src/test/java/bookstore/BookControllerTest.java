@@ -10,7 +10,9 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Transactional
+@DirtiesContext
 public class BookControllerTest {
 
     private static final String AGGREGATE_ROOT_INFIX = "/books";
@@ -61,8 +65,7 @@ public class BookControllerTest {
         Resources<Resource<Book>> resources = controller.getAllBooks();
         assertEquals(AGGREGATE_ROOT_INFIX, resources.getLink(SELF_REL_NAME).getHref());
         Iterator<Resource<Book>> iterator = resources.getContent().iterator();
-        System.out.println(resources);
-        for (Long i = 0L; i < existingBooks.size(); i++) {
+        for (Long i = 0L; i < resources.getContent().size(); i++) {
             Resource<Book> resource = iterator.next();
             assertEquals(existingBooks.get(i.intValue()), resource.getContent());
             assertEquals(String.format(SELF_REL_TEMPLATE, i + 1), resource.getLink(SELF_REL_NAME).getHref());
