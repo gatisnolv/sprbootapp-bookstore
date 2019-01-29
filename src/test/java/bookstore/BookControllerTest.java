@@ -1,5 +1,6 @@
 package bookstore;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,10 @@ public class BookControllerTest {
     private static final String SELF_REL_NAME = "self";
     private static final String AGGREGATE_ROOT_REL_NAME = "books";
     private static final Long EXISTING_ID = 1L;
-    private static final Long EXISTING_ID_2 = 2L;
     private static final Long NEW_ID = 4L;
     private static final Long NONEXISTING_ID = 10L;
     private static final String EXISTING_TITLE = "1984";
-    private static final String NONEXISTING_TITLE = "2000";
+    private static final String NONEXISTING_TITLE = "Non Existing";
     private static final String TITLE = "Metropolis";
     private static final String AUTHOR = "Thea von Harbou";
     private static final String PUBLISHER = "Illustriertes Blatt";
@@ -45,11 +45,15 @@ public class BookControllerTest {
     @Autowired
     private BookController controller;
 
-    @Test
-    public void getAllBooks() {
+    @BeforeClass
+    public static void setupBookIds() {
         EXISTING_BOOK_1.setId(1L);
         EXISTING_BOOK_2.setId(2L);
         EXISTING_BOOK_3.setId(3L);
+    }
+
+    @Test
+    public void getAllBooks() {
         List<Book> existingBooks = new ArrayList<>();
         existingBooks.add(EXISTING_BOOK_1);
         existingBooks.add(EXISTING_BOOK_2);
@@ -69,7 +73,6 @@ public class BookControllerTest {
     @Test
     public void postBookWithNonNullFields() throws URISyntaxException {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        newBook.setId(NEW_ID);
         ResponseEntity<?> responseEntity = controller.postNewBook(newBook);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
@@ -91,7 +94,6 @@ public class BookControllerTest {
     @Test
     public void getOneExistingById() {
         Book existingBook = new Book(EXISTING_BOOK_1);
-        existingBook.setId(1L);
         Resource<Book> resource = controller.getOneBookById(EXISTING_ID);
         assertEquals(existingBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
@@ -110,7 +112,6 @@ public class BookControllerTest {
     @Test
     public void getOneExistingByTitle() {
         Book existingBook = new Book(EXISTING_BOOK_1);
-        existingBook.setId(1L);
         Resource<Book> resource = controller.getOneBookByTitle(EXISTING_TITLE);
         assertEquals(existingBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
@@ -130,12 +131,13 @@ public class BookControllerTest {
     @Test
     public void replaceBookWithNonNullFields() throws URISyntaxException {
         Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID_2);
+        newBook.setId(EXISTING_ID);
+        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
         assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID_2), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
@@ -151,7 +153,7 @@ public class BookControllerTest {
     @Test
     public void replaceBookWithNullFields() throws URISyntaxException {
         try {
-            controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID_2);
+            controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID);
         } catch (RuntimeException e) {
             assertTrue(e instanceof AllFieldsNullException);
         }
@@ -159,7 +161,7 @@ public class BookControllerTest {
 
     @Test
     public void deleteExisting() {
-        ResponseEntity<?> responseEntity = controller.deleteBookById(EXISTING_ID_2);
+        ResponseEntity<?> responseEntity = controller.deleteBookById(EXISTING_ID);
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
     }
 
