@@ -21,7 +21,7 @@ public class BookTest {
 
     @Test
     public void testCopyConstructor() {
-        Book book = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
+        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
         book.setId(1L);
         Book copy = new Book(book);
         assertEquals(book.getId(), copy.getId());
@@ -33,14 +33,13 @@ public class BookTest {
 
     @Test
     public void testNonNullGetPubLicationDate() {
-        String date = "1949-06-08";
-        Book book = new Book("1984", "George Orwell", "Secker & Warburg", date);
-        assertEquals(date, book.getPublicationDate());
+        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
+        assertEquals(WebIT.PUBLICATION_DATE, book.getPublicationDate());
     }
 
     @Test
     public void testNullGetPublicationDate() {
-        Book book = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
+        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
         book.setPublicationDate(null);
         assertNull(book.getPublicationDate());
     }
@@ -53,7 +52,7 @@ public class BookTest {
 
     @Test
     public void testNotAllFieldsNull() {
-        Book book = new Book(null, null, null, "1984-01-01");
+        Book book = new Book(null, null, null, WebIT.PUBLICATION_DATE);
         assertFalse(book.allFieldsNull());
     }
 

@@ -12,10 +12,8 @@ public class BookNotFoundAdviceTest {
     @Test
     public void test() {
         BookNotFoundAdvice advice = new BookNotFoundAdvice();
-        Long id = 7L;
-        String message = "Could not find book with id: " + id;
-        BookNotFoundException e = new BookNotFoundException(id);
-        assertEquals(message, advice.bookNotFoundHandler(e));
+        BookNotFoundException e = new BookNotFoundException(WebIT.NONEXISTING_ID);
+        assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, advice.bookNotFoundHandler(e));
     }
 
 }

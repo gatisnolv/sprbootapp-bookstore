@@ -11,18 +11,15 @@ public class BookNotFoundExceptionTest {
 
     @Test
     public void testId() {
-        Long id = 7L;
-        String message = "Could not find book with id: " + id;
-        Exception e = new BookNotFoundException(id);
-        assertEquals(message, e.getMessage());
+        Exception e = new BookNotFoundException(WebIT.NONEXISTING_ID);
+        assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
     }
 
     @Test
     public void testName() {
-        String name = "Test Name";
-        String message = "Could not find book with title: '" + name + "'";
-        Exception e = new BookNotFoundException(name);
-        assertEquals(message, e.getMessage());
+        Exception e = new BookNotFoundException(WebIT.NONEXISTING_TITLE);
+        assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_TITLE)
+                + String.format(WebIT.PARENTHESIZE_TITLE_TEMPLATE, WebIT.NONEXISTING_TITLE), e.getMessage());
     }
 
 }

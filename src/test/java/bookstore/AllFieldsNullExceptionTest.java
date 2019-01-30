@@ -11,9 +11,8 @@ public class AllFieldsNullExceptionTest {
 
     @Test
     public void test() {
-        String message = "All fields were missing/null, the entry was not saved";
         Exception e = new AllFieldsNullException();
-        assertEquals(message, e.getMessage());
+        assertEquals(WebIT.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, e.getMessage());
     }
 
 }

@@ -10,16 +10,16 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 public class BookResourceAssemblerTest {
 
+    private static final String ID_LINK_POSTFIX_PLACEHOLDER = "{id}";
+
     @Test
     public void test() {
         BookResourceAssembler assembler = new BookResourceAssembler();
-        String selfLink = "/books/{id}";
-        String aggregateRootLink = "/books";
-        Book book = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
+        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
         Resource<Book> resource = assembler.toResource(book);
         assertEquals(book, resource.getContent());
-        assertEquals(selfLink, resource.getLink("self").getHref());
-        assertEquals(aggregateRootLink, resource.getLink("books").getHref());
+        assertEquals(String.format(BookControllerTest.SELF_REL_TEMPLATE, ID_LINK_POSTFIX_PLACEHOLDER), resource.getLink(BookControllerTest.SELF_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(BookControllerTest.AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
 }
