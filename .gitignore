@@ -1,5 +1,11 @@
 /target/
-!.mvn/wrapper/maven-wrapper.jar
+
+mvnw
+mvnw.cmd
+/.mvn/
+/src/main/resources/application.properties
+
+*.DS_Store
 
 ### STS ###
 .apt_generated
