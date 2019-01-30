@@ -27,10 +27,9 @@ import static org.junit.Assert.*;
 @DirtiesContext
 public class BookControllerTest {
 
-    private static final String SELF_REL_NAME = "self";
-    private static final String AGGREGATE_ROOT_REL_NAME = "books";
-    private static final String SELF_REL_TEMPLATE = "/books/%s";
-    private static final String AGGREGATE_ROOT_REL = "/books";
+    static final String SELF_REL_NAME = "self";
+    static final String AGGREGATE_ROOT_REL_NAME = "books";
+    static final String SELF_REL_TEMPLATE = "/books/%s";
     private static final String EXPECTED_EXCEPTION_MESSAGE_TEMPLATE = "Expected a(n) %s to be thrown";
 
     private static final Book EXISTING_BOOK_1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
@@ -60,7 +59,7 @@ public class BookControllerTest {
             Resource<Book> resource = iterator.next();
             assertEquals(existingBooks.get(i.intValue()), resource.getContent());
             assertEquals(String.format(SELF_REL_TEMPLATE, i + 1), resource.getLink(SELF_REL_NAME).getHref());
-            assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
+            assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
         }
     }
 
@@ -73,7 +72,7 @@ public class BookControllerTest {
         assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.NEW_ID), resource.getLink(SELF_REL_NAME).getHref());
-        assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
     @Test(expected = AllFieldsNullException.class)
@@ -87,7 +86,7 @@ public class BookControllerTest {
         Resource<Book> resource = controller.getOneBookById(WebIT.EXISTING_ID);
         assertEquals(existingBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
-        assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
     @Test
@@ -106,7 +105,7 @@ public class BookControllerTest {
         Resource<Book> resource = controller.getOneBookByTitle(WebIT.EXISTING_TITLE);
         assertEquals(existingBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
-        assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
 
     }
 
@@ -131,7 +130,7 @@ public class BookControllerTest {
         assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
         assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
-        assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
     @Test
