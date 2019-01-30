@@ -27,18 +27,8 @@ import static org.junit.Assert.*;
 @DirtiesContext
 public class BookControllerTest {
 
-    private static final String AGGREGATE_ROOT_INFIX = "/books";
     private static final String SELF_REL_NAME = "self";
     private static final String AGGREGATE_ROOT_REL_NAME = "books";
-    private static final Long EXISTING_ID = 1L;
-    private static final Long NEW_ID = 4L;
-    private static final Long NONEXISTING_ID = 10L;
-    private static final String EXISTING_TITLE = "1984";
-    private static final String NONEXISTING_TITLE = "Non Existing";
-    private static final String TITLE = "Metropolis";
-    private static final String AUTHOR = "Thea von Harbou";
-    private static final String PUBLISHER = "Illustriertes Blatt";
-    private static final String PUBLICATION_DATE = "1925-01-01";
     private static final String SELF_REL_TEMPLATE = "/books/%s";
     private static final String AGGREGATE_ROOT_REL = "/books";
 
@@ -63,7 +53,7 @@ public class BookControllerTest {
         existingBooks.add(EXISTING_BOOK_2);
         existingBooks.add(EXISTING_BOOK_3);
         Resources<Resource<Book>> resources = controller.getAllBooks();
-        assertEquals(AGGREGATE_ROOT_INFIX, resources.getLink(SELF_REL_NAME).getHref());
+        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resources.getLink(SELF_REL_NAME).getHref());
         Iterator<Resource<Book>> iterator = resources.getContent().iterator();
         for (Long i = 0L; i < resources.getContent().size(); i++) {
             Resource<Book> resource = iterator.next();
@@ -75,13 +65,13 @@ public class BookControllerTest {
 
     @Test
     public void postBookWithNonNullFields() throws URISyntaxException {
-        Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
+        Book newBook = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
         ResponseEntity<?> responseEntity = controller.postNewBook(newBook);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
         assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, NEW_ID), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.NEW_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
@@ -97,16 +87,16 @@ public class BookControllerTest {
     @Test
     public void getOneExistingById() {
         Book existingBook = new Book(EXISTING_BOOK_1);
-        Resource<Book> resource = controller.getOneBookById(EXISTING_ID);
+        Resource<Book> resource = controller.getOneBookById(WebIT.EXISTING_ID);
         assertEquals(existingBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
     @Test
     public void getOneNonExistingById() {
         try {
-            controller.getOneBookById(NONEXISTING_ID);
+            controller.getOneBookById(WebIT.NONEXISTING_ID);
         } catch (RuntimeException e) {
             assertTrue(e instanceof BookNotFoundException);
         }
@@ -115,9 +105,9 @@ public class BookControllerTest {
     @Test
     public void getOneExistingByTitle() {
         Book existingBook = new Book(EXISTING_BOOK_1);
-        Resource<Book> resource = controller.getOneBookByTitle(EXISTING_TITLE);
+        Resource<Book> resource = controller.getOneBookByTitle(WebIT.EXISTING_TITLE);
         assertEquals(existingBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
 
     }
@@ -125,7 +115,7 @@ public class BookControllerTest {
     @Test
     public void getOneNonExistingByTitle() {
         try {
-            controller.getOneBookByTitle(NONEXISTING_TITLE);
+            controller.getOneBookByTitle(WebIT.NONEXISTING_TITLE);
         } catch (RuntimeException e) {
             assertTrue(e instanceof BookNotFoundException);
         }
@@ -133,21 +123,21 @@ public class BookControllerTest {
 
     @Test
     public void replaceBookWithNonNullFields() throws URISyntaxException {
-        Book newBook = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
-        newBook.setId(EXISTING_ID);
-        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, EXISTING_ID);
+        Book newBook = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
+        newBook.setId(WebIT.EXISTING_ID);
+        ResponseEntity<?> responseEntity = controller.replaceBookById(newBook, WebIT.EXISTING_ID);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         Resource<Book> resource = (Resource<Book>) responseEntity.getBody();
         assertNotNull(resource);
         assertEquals(newBook, resource.getContent());
-        assertEquals(String.format(SELF_REL_TEMPLATE, EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
+        assertEquals(String.format(SELF_REL_TEMPLATE, WebIT.EXISTING_ID), resource.getLink(SELF_REL_NAME).getHref());
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
     @Test
     public void replaceNonExistingBookWithNonNullFields() throws URISyntaxException {
         try {
-            controller.replaceBookById(new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE), NONEXISTING_ID);
+            controller.replaceBookById(new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE), WebIT.NONEXISTING_ID);
         } catch (RuntimeException e) {
             assertTrue(e instanceof BookNotFoundException);
         }
@@ -156,7 +146,7 @@ public class BookControllerTest {
     @Test
     public void replaceBookWithNullFields() throws URISyntaxException {
         try {
-            controller.replaceBookById(new Book(null, null, null, null), EXISTING_ID);
+            controller.replaceBookById(new Book(null, null, null, null), WebIT.EXISTING_ID);
         } catch (RuntimeException e) {
             assertTrue(e instanceof AllFieldsNullException);
         }
@@ -164,14 +154,14 @@ public class BookControllerTest {
 
     @Test
     public void deleteExisting() {
-        ResponseEntity<?> responseEntity = controller.deleteBookById(EXISTING_ID);
+        ResponseEntity<?> responseEntity = controller.deleteBookById(WebIT.EXISTING_ID);
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
     }
 
     @Test
     public void deleteNonExisting() {
         try {
-            controller.deleteBookById(NONEXISTING_ID);
+            controller.deleteBookById(WebIT.NONEXISTING_ID);
         } catch (RuntimeException e) {
             assertTrue(e instanceof BookNotFoundException);
         }

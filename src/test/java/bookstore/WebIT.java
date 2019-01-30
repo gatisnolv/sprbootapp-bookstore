@@ -28,30 +28,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @DirtiesContext
-public class WebIntegrationTest {
+public class WebIT {
 
-    private static final String AGGREGATE_ROOT_INFIX = "/books";
-    private static final String FIND_BY_TITLE_INFIX = "/title";
-    private static final Long EXISTING_ID = 1L;
-    private static final Long NEW_ID = 4L;
-    private static final Long NONEXISTING_ID = 10L;
-    private static final String EXISTING_TITLE = "1984";
-    private static final String NONEXISTING_TITLE = "Non Existing";
-    private static final String TITLE = "Metropolis";
-    private static final String AUTHOR = "Thea von Harbou";
-    private static final String PUBLISHER = "Illustriertes Blatt";
-    private static final String PUBLICATION_DATE = "1925-01-01";
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TITLE = "title";
-    private static final String FIELD_AUTHOR = "author";
-    private static final String FIELD_PUBLISHER = "publisher";
-    private static final String FIELD_PUBLICATION_DATE = "publicationDate";
-    private static final String BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE = "Could not find book with %s: ";
-    private static final String ALL_FIELDS_NULL_EXCEPTION_MESSAGE = "All fields were missing/null, the entry was not saved";
-    private static final String PARENTHESIZE_TITLE_TEMPLATE = "'%s'";
-    private static final String JSON_PATH_ROOT_PREFIX = "$.";
-    private static final String JSON_BOOKLIST_PATH_INFIX = "_embedded.bookList";
-    private static final String JSON_AGGREGATE_ACCESSOR_INFIX = "[*].";
+    static final String AGGREGATE_ROOT_INFIX = "/books";
+    static final String FIND_BY_TITLE_INFIX = "/title";
+    static final Long EXISTING_ID = 1L;
+    static final Long NEW_ID = 4L;
+    static final Long NONEXISTING_ID = 10L;
+    static final String EXISTING_TITLE = "1984";
+    static final String NONEXISTING_TITLE = "Non Existing";
+    static final String TITLE = "Metropolis";
+    static final String AUTHOR = "Thea von Harbou";
+    static final String PUBLISHER = "Illustriertes Blatt";
+    static final String PUBLICATION_DATE = "1925-01-01";
+    static final String FIELD_ID = "id";
+    static final String FIELD_TITLE = "title";
+    static final String FIELD_AUTHOR = "author";
+    static final String FIELD_PUBLISHER = "publisher";
+    static final String FIELD_PUBLICATION_DATE = "publicationDate";
+    static final String BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE = "Could not find book with %s: ";
+    static final String ALL_FIELDS_NULL_EXCEPTION_MESSAGE = "All fields were missing/null, the entry was not saved";
+    static final String PARENTHESIZE_TITLE_TEMPLATE = "'%s'";
+    static final String JSON_PATH_ROOT_PREFIX = "$.";
+    static final String JSON_BOOKLIST_PATH_INFIX = "_embedded.bookList";
+    static final String JSON_AGGREGATE_ACCESSOR_INFIX = "[*].";
 
     private static final Book EXISTING_BOOK_1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
     private static final Book EXISTING_BOOK_2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
