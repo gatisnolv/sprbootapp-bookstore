@@ -31,6 +31,7 @@ public class BookControllerTest {
     private static final String AGGREGATE_ROOT_REL_NAME = "books";
     private static final String SELF_REL_TEMPLATE = "/books/%s";
     private static final String AGGREGATE_ROOT_REL = "/books";
+    private static final String EXPECTED_EXCEPTION_MESSAGE_TEMPLATE = "Expected a(n) %s to be thrown";
 
     private static final Book EXISTING_BOOK_1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
     private static final Book EXISTING_BOOK_2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
@@ -75,13 +76,9 @@ public class BookControllerTest {
         assertEquals(AGGREGATE_ROOT_REL, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
-    @Test
+    @Test(expected = AllFieldsNullException.class)
     public void postBookWithAllNullFields() throws URISyntaxException {
-        try {
-            controller.postNewBook(new Book(null, null, null, null));
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof AllFieldsNullException);
-        }
+        controller.postNewBook(new Book(null, null, null, null));
     }
 
     @Test
@@ -97,8 +94,9 @@ public class BookControllerTest {
     public void getOneNonExistingById() {
         try {
             controller.getOneBookById(WebIT.NONEXISTING_ID);
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof BookNotFoundException);
+            fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
+        } catch (BookNotFoundException e) {
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
         }
     }
 
@@ -116,8 +114,10 @@ public class BookControllerTest {
     public void getOneNonExistingByTitle() {
         try {
             controller.getOneBookByTitle(WebIT.NONEXISTING_TITLE);
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof BookNotFoundException);
+            fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
+        } catch (BookNotFoundException e) {
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_TITLE)
+                    + String.format(WebIT.PARENTHESIZE_TITLE_TEMPLATE, WebIT.NONEXISTING_TITLE), e.getMessage());
         }
     }
 
@@ -138,18 +138,15 @@ public class BookControllerTest {
     public void replaceNonExistingBookWithNonNullFields() throws URISyntaxException {
         try {
             controller.replaceBookById(new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE), WebIT.NONEXISTING_ID);
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof BookNotFoundException);
+            fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
+        } catch (BookNotFoundException e) {
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
         }
     }
 
-    @Test
+    @Test(expected = AllFieldsNullException.class)
     public void replaceBookWithNullFields() throws URISyntaxException {
-        try {
-            controller.replaceBookById(new Book(null, null, null, null), WebIT.EXISTING_ID);
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof AllFieldsNullException);
-        }
+        controller.replaceBookById(new Book(null, null, null, null), WebIT.EXISTING_ID);
     }
 
     @Test
@@ -162,8 +159,9 @@ public class BookControllerTest {
     public void deleteNonExisting() {
         try {
             controller.deleteBookById(WebIT.NONEXISTING_ID);
-        } catch (RuntimeException e) {
-            assertTrue(e instanceof BookNotFoundException);
+            fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
+        } catch (BookNotFoundException e) {
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
         }
     }
 
