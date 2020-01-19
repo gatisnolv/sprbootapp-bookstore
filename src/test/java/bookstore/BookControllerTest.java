@@ -31,7 +31,6 @@ public class BookControllerTest {
     static final String SELF_REL_NAME = "self";
     static final String AGGREGATE_ROOT_REL_NAME = "books";
     static final String SELF_REL_TEMPLATE = "/books/%s";
-    private static final String EXPECTED_EXCEPTION_MESSAGE_TEMPLATE = "Expected a(n) %s to be thrown";
 
     private static final Book EXISTING_BOOK_1 = new Book("1984", "George Orwell", "Secker & Warburg", "1949-06-08");
     private static final Book EXISTING_BOOK_2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
@@ -56,9 +55,9 @@ public class BookControllerTest {
         Resources<Resource<Book>> resources = controller.getAllBooks();
         assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resources.getLink(SELF_REL_NAME).getHref());
         Iterator<Resource<Book>> iterator = resources.getContent().iterator();
-        for (Long i = 0L; i < resources.getContent().size(); i++) {
+        for (int i = 0; i < resources.getContent().size(); i++) {
             Resource<Book> resource = iterator.next();
-            assertEquals(existingBooks.get(i.intValue()), resource.getContent());
+            assertEquals(existingBooks.get(i), resource.getContent());
             assertEquals(String.format(SELF_REL_TEMPLATE, i + 1), resource.getLink(SELF_REL_NAME).getHref());
             assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(AGGREGATE_ROOT_REL_NAME).getHref());
         }

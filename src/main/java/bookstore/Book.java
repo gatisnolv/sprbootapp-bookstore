@@ -37,7 +37,7 @@ class Book {
         this.publicationDate = book.publicationDate;
     }
 
-    public void setPublicationDate(String publicationDate) {//TODO q: how can I address incorrect date (format or impossible date) exception
+    public void setPublicationDate(String publicationDate) {
         if (publicationDate == null) {
             this.publicationDate = null;
             return;

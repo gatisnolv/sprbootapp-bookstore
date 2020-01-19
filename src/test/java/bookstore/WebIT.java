@@ -14,9 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,7 +64,7 @@ public class WebIT {
     private static final Book EXISTING_BOOK_2 = new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07");
     private static final Book EXISTING_BOOK_3 = new Book("Animal Farm", "George Orwell", "Secker & Warburg", "1945-08-17");
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext wac;
@@ -91,10 +88,6 @@ public class WebIT {
 
     @Test
     public void getAllBooks() throws Exception {
-        List<Book> bookList = new LinkedList<>();
-        bookList.add(EXISTING_BOOK_1);
-        bookList.add(EXISTING_BOOK_2);
-        bookList.add(EXISTING_BOOK_3);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + "/")
                 .accept(MediaTypes.HAL_JSON_UTF8))
                 .andDo(print())
@@ -147,7 +140,6 @@ public class WebIT {
 
     @Test
     public void getOneExistingById() throws Exception {
-        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
                 .accept(MediaTypes.HAL_JSON_UTF8)
         )
@@ -170,7 +162,6 @@ public class WebIT {
 
     @Test
     public void getOneExistingByTitle() throws Exception {
-        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + EXISTING_TITLE)
                 .accept(MediaTypes.HAL_JSON_UTF8)
         )
