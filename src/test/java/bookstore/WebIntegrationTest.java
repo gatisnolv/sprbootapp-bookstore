@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @DirtiesContext
-public class WebIT {
+public class WebIntegrationTest {
 
     static final String AGGREGATE_ROOT_INFIX = "/books";
     static final String FIND_BY_TITLE_INFIX = "/title";

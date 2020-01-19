@@ -13,7 +13,7 @@ public class AllFieldsNullAdviceTest {
     public void test() {
         AllFieldsNullAdvice advice = new AllFieldsNullAdvice();
         AllFieldsNullException e = new AllFieldsNullException();
-        assertEquals(WebIT.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, advice.allFieldsNullHandler(e));
+        assertEquals(WebIntegrationTest.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, advice.allFieldsNullHandler(e));
     }
 
 }

@@ -15,12 +15,13 @@ public class BookResourceAssemblerTest {
     @Test
     public void test() {
         BookResourceAssembler assembler = new BookResourceAssembler();
-        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
+        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
+                WebIntegrationTest.PUBLICATION_DATE);
         Resource<Book> resource = assembler.toResource(book);
         assertEquals(book, resource.getContent());
         assertEquals(String.format(BookControllerTest.SELF_REL_TEMPLATE, ID_LINK_POSTFIX_PLACEHOLDER),
                 resource.getLink(BookControllerTest.SELF_REL_NAME).getHref());
-        assertEquals(WebIT.AGGREGATE_ROOT_INFIX, resource.getLink(BookControllerTest.AGGREGATE_ROOT_REL_NAME).getHref());
+        assertEquals(WebIntegrationTest.AGGREGATE_ROOT_INFIX, resource.getLink(BookControllerTest.AGGREGATE_ROOT_REL_NAME).getHref());
     }
 
 }

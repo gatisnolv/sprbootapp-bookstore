@@ -12,7 +12,7 @@ public class AllFieldsNullExceptionTest {
     @Test
     public void test() {
         Exception e = new AllFieldsNullException();
-        assertEquals(WebIT.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, e.getMessage());
+        assertEquals(WebIntegrationTest.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, e.getMessage());
     }
 
 }

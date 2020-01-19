@@ -24,7 +24,8 @@ public class BookTest {
 
     @Test
     public void testCopyConstructor() {
-        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
+        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
+                WebIntegrationTest.PUBLICATION_DATE);
         book.setId(1L);
         Book copy = new Book(book);
         assertEquals(book.getId(), copy.getId());
@@ -36,13 +37,15 @@ public class BookTest {
 
     @Test
     public void testNonNullGetPubLicationDate() {
-        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
-        assertEquals(WebIT.PUBLICATION_DATE, book.getPublicationDate());
+        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
+                WebIntegrationTest.PUBLICATION_DATE);
+        assertEquals(WebIntegrationTest.PUBLICATION_DATE, book.getPublicationDate());
     }
 
     @Test
     public void testNullGetPublicationDate() {
-        Book book = new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE);
+        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
+                WebIntegrationTest.PUBLICATION_DATE);
         book.setPublicationDate(null);
         assertNull(book.getPublicationDate());
     }
@@ -55,7 +58,7 @@ public class BookTest {
 
     @Test
     public void testNotAllFieldsNull() {
-        Book book = new Book(null, null, null, WebIT.PUBLICATION_DATE);
+        Book book = new Book(null, null, null, WebIntegrationTest.PUBLICATION_DATE);
         assertFalse(book.allFieldsNull());
     }
 

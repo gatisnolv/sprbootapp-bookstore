@@ -12,9 +12,10 @@ public class BookNotFoundAdviceTest {
     @Test
     public void test() {
         BookNotFoundAdvice advice = new BookNotFoundAdvice();
-        BookNotFoundException e = new BookNotFoundException(WebIT.NONEXISTING_ID);
-        assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID,
-                advice.bookNotFoundHandler(e));
+        BookNotFoundException e = new BookNotFoundException(WebIntegrationTest.NONEXISTING_ID);
+        assertEquals(String.format(
+                WebIntegrationTest.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIntegrationTest.FIELD_ID)
+                + WebIntegrationTest.NONEXISTING_ID, advice.bookNotFoundHandler(e));
     }
 
 }
