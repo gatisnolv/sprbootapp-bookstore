@@ -1,6 +1,25 @@
 package bookstore;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookController.class)
@@ -58,11 +68,17 @@ public class WebMockTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX).exists())
                 .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX).value(hasSize(3)))
-                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_ID).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_TITLE).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_AUTHOR).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_PUBLISHER).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))));
+                .andExpect(jsonPath(
+                        WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX + WebIT.FIELD_ID)
+                        .value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX
+                        + WebIT.FIELD_TITLE).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX
+                        + WebIT.FIELD_AUTHOR).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX
+                        + WebIT.FIELD_PUBLISHER).value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(WebIT.JSON_PATH_ROOT_PREFIX + WebIT.JSON_BOOKLIST_PATH_INFIX + WebIT.JSON_AGGREGATE_ACCESSOR_INFIX
+                        + WebIT.FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))));
     }
 
     @Test
@@ -121,7 +137,8 @@ public class WebMockTest {
         mockMvc.perform(get(WebIT.AGGREGATE_ROOT_INFIX + "/" + WebIT.NONEXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
+                .andExpect(content().string(
+                        String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
     }
 
     @Test
@@ -145,7 +162,8 @@ public class WebMockTest {
         mockMvc.perform(get(WebIT.AGGREGATE_ROOT_INFIX + WebIT.FIND_BY_TITLE_INFIX + "/" + WebIT.NONEXISTING_TITLE))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_TITLE) + String.format(WebIT.PARENTHESIZE_TITLE_TEMPLATE, WebIT.NONEXISTING_TITLE)));
+                .andExpect(content().string(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_TITLE) +
+                        String.format(WebIT.PARENTHESIZE_TITLE_TEMPLATE, WebIT.NONEXISTING_TITLE)));
     }
 
     @Test
@@ -180,7 +198,8 @@ public class WebMockTest {
         )
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
+                .andExpect(content().string(
+                        String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
     }
 
     @Test
@@ -211,6 +230,7 @@ public class WebMockTest {
         mockMvc.perform(delete(WebIT.AGGREGATE_ROOT_INFIX + "/" + WebIT.NONEXISTING_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
+                .andExpect(content().string(
+                        String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID));
     }
 }

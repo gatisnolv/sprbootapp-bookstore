@@ -1,6 +1,22 @@
 package bookstore;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,13 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -91,11 +101,17 @@ public class WebIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX).exists())
                 .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX).value(hasSize(3)))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_ID).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_TITLE).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_AUTHOR).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLISHER).value(not(hasItem(nullValue()))))
-                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLICATION_DATE).value(not(hasItem(nullValue()))));
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_ID)
+                        .value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_TITLE)
+                        .value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_AUTHOR)
+                        .value(not(hasItem(nullValue()))))
+                .andExpect(jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLISHER)
+                        .value(not(hasItem(nullValue()))))
+                .andExpect(
+                        jsonPath(JSON_PATH_ROOT_PREFIX + JSON_BOOKLIST_PATH_INFIX + JSON_AGGREGATE_ACCESSOR_INFIX + FIELD_PUBLICATION_DATE)
+                                .value(not(hasItem(nullValue()))));
     }
 
     @Test
@@ -171,7 +187,8 @@ public class WebIT {
         mockMvc.perform(get(AGGREGATE_ROOT_INFIX + FIND_BY_TITLE_INFIX + "/" + NONEXISTING_TITLE))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(String.format(BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, FIELD_TITLE) + String.format(PARENTHESIZE_TITLE_TEMPLATE, NONEXISTING_TITLE)));
+                .andExpect(content().string(String.format(BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, FIELD_TITLE) + String
+                        .format(PARENTHESIZE_TITLE_TEMPLATE, NONEXISTING_TITLE)));
     }
 
     @Test

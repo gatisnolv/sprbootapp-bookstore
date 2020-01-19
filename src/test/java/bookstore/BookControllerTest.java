@@ -1,5 +1,14 @@
 package bookstore;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -95,7 +97,8 @@ public class BookControllerTest {
             controller.getOneBookById(WebIT.NONEXISTING_ID);
             fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
         } catch (BookNotFoundException e) {
-            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID,
+                    e.getMessage());
         }
     }
 
@@ -139,7 +142,8 @@ public class BookControllerTest {
             controller.replaceBookById(new Book(WebIT.TITLE, WebIT.AUTHOR, WebIT.PUBLISHER, WebIT.PUBLICATION_DATE), WebIT.NONEXISTING_ID);
             fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
         } catch (BookNotFoundException e) {
-            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID,
+                    e.getMessage());
         }
     }
 
@@ -160,7 +164,8 @@ public class BookControllerTest {
             controller.deleteBookById(WebIT.NONEXISTING_ID);
             fail(String.format(EXPECTED_EXCEPTION_MESSAGE_TEMPLATE, BookNotFoundException.class.getSimpleName()));
         } catch (BookNotFoundException e) {
-            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID, e.getMessage());
+            assertEquals(String.format(WebIT.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIT.FIELD_ID) + WebIT.NONEXISTING_ID,
+                    e.getMessage());
         }
     }
 

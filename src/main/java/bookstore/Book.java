@@ -1,19 +1,18 @@
 package bookstore;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalDate;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
 class Book {
-
-    private static final String EMPTY_STRING = "";
 
     @Id
     @GeneratedValue
