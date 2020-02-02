@@ -1,5 +1,9 @@
 package bookstore;
 
+import static bookstore.WebIntegrationTest.AUTHOR;
+import static bookstore.WebIntegrationTest.PUBLICATION_DATE;
+import static bookstore.WebIntegrationTest.PUBLISHER;
+import static bookstore.WebIntegrationTest.TITLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -23,29 +27,14 @@ public class BookTest {
     }
 
     @Test
-    public void testCopyConstructor() {
-        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
-                WebIntegrationTest.PUBLICATION_DATE);
-        book.setId(1L);
-        Book copy = new Book(book);
-        assertEquals(book.getId(), copy.getId());
-        assertEquals(book.getTitle(), copy.getTitle());
-        assertEquals(book.getAuthor(), copy.getAuthor());
-        assertEquals(book.getPublisher(), copy.getPublisher());
-        assertEquals(book.getPublicationDate(), copy.getPublicationDate());
-    }
-
-    @Test
-    public void testNonNullGetPubLicationDate() {
-        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
-                WebIntegrationTest.PUBLICATION_DATE);
-        assertEquals(WebIntegrationTest.PUBLICATION_DATE, book.getPublicationDate());
+    public void testNonNullGetPublicationDate() {
+        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
+        assertEquals(PUBLICATION_DATE, book.getPublicationDate());
     }
 
     @Test
     public void testNullGetPublicationDate() {
-        Book book = new Book(WebIntegrationTest.TITLE, WebIntegrationTest.AUTHOR, WebIntegrationTest.PUBLISHER,
-                WebIntegrationTest.PUBLICATION_DATE);
+        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         book.setPublicationDate(null);
         assertNull(book.getPublicationDate());
     }
@@ -58,7 +47,7 @@ public class BookTest {
 
     @Test
     public void testNotAllFieldsNull() {
-        Book book = new Book(null, null, null, WebIntegrationTest.PUBLICATION_DATE);
+        Book book = new Book(null, null, null, PUBLICATION_DATE);
         assertFalse(book.allFieldsNull());
     }
 

@@ -29,12 +29,8 @@ class Book {
         setPublicationDate(publicationDate);
     }
 
-    Book(Book book) {
-        this.id = new Long(book.id);
-        this.title = book.title;
-        this.author = book.author;
-        this.publisher = book.publisher;
-        this.publicationDate = book.publicationDate;
+    Book(BookDTO bookDTO) {
+        this(bookDTO.getTitle(), bookDTO.getAuthor(), bookDTO.getPublisher(), bookDTO.getPublicationDate());
     }
 
     public void setPublicationDate(String publicationDate) {

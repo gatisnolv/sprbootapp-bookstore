@@ -17,9 +17,9 @@ class LoadDatabase {
             repository.save(new Book("To Kill a Mockingbird", "Harper Lee", "J. B. Lippincott & Co.", "1960-11-07"));
             repository.save(new Book("Animal Farm", "George Orwell", "Secker & Warburg", "1945-08-17"));
 
-            repository.findAll().forEach(book -> {
-                log.info("Preloading " + book);
-            });
+            repository.findAll().forEach(book ->
+                    log.info("Preloading " + book)
+            );
         };
     }
 }

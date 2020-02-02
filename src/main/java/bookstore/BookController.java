@@ -34,7 +34,7 @@ class BookController {
 
     //Aggregate root
     @GetMapping(value = "/books", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-    Resources<Resource<Book>> getAllBooks() {
+    public Resources<Resource<Book>> getAllBooks() {
         List<Resource<Book>> books = repository.findAll().stream()
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
@@ -42,7 +42,8 @@ class BookController {
     }
 
     @PostMapping("/books")
-    ResponseEntity<?> postNewBook(@RequestBody Book newBook) throws URISyntaxException {
+    public ResponseEntity<Resource<Book>> postNewBook(@RequestBody BookDTO newBookDTO) throws URISyntaxException {
+        Book newBook = new Book(newBookDTO);
         if (newBook.allFieldsNull()) {
             throw new AllFieldsNullException();
         }
@@ -54,14 +55,14 @@ class BookController {
 
     //Single item
     @GetMapping(value = "/books/{id}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-    Resource<Book> getOneBookById(@PathVariable Long id) {
+    public Resource<Book> getOneBookById(@PathVariable Long id) {
         Book book = repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         return assembler.toResource(book);
     }
 
     @GetMapping(value = "/books/title/{title}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-    Resource<Book> getOneBookByTitle(@PathVariable String title) {
+    public Resource<Book> getOneBookByTitle(@PathVariable String title) {
         Book book = repository.findByTitleIgnoreCase(title);
         if (book == null) {
             throw new BookNotFoundException(title);
@@ -70,7 +71,9 @@ class BookController {
     }
 
     @PutMapping("/books/{id}")
-    ResponseEntity<?> replaceBookById(@RequestBody Book newBook, @PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<Resource<Book>> replaceBookById(@RequestBody BookDTO newBookDTO, @PathVariable Long id)
+            throws URISyntaxException {
+        Book newBook = new Book(newBookDTO);
         if (newBook.allFieldsNull()) {
             throw new AllFieldsNullException();
         }
@@ -82,7 +85,7 @@ class BookController {
             return repository.save(book);
         }).orElseThrow(() -> new BookNotFoundException(id));
 
-        Resource<?> resource = assembler.toResource(updatedBook);
+        Resource<Book> resource = assembler.toResource(updatedBook);
 
         return ResponseEntity
                 .created(new URI(resource.getId().expand().getHref()))
@@ -90,7 +93,7 @@ class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    ResponseEntity<?> deleteBookById(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteBookById(@PathVariable Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

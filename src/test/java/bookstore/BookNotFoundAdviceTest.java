@@ -1,5 +1,8 @@
 package bookstore;
 
+import static bookstore.WebIntegrationTest.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE;
+import static bookstore.WebIntegrationTest.FIELD_ID;
+import static bookstore.WebIntegrationTest.NONEXISTING_ID;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -12,10 +15,8 @@ public class BookNotFoundAdviceTest {
     @Test
     public void test() {
         BookNotFoundAdvice advice = new BookNotFoundAdvice();
-        BookNotFoundException e = new BookNotFoundException(WebIntegrationTest.NONEXISTING_ID);
-        assertEquals(String.format(
-                WebIntegrationTest.BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, WebIntegrationTest.FIELD_ID)
-                + WebIntegrationTest.NONEXISTING_ID, advice.bookNotFoundHandler(e));
+        BookNotFoundException e = new BookNotFoundException(NONEXISTING_ID);
+        assertEquals(String.format(BOOK_NOT_FOUND_EXCEPTION_MESSAGE_TEMPLATE, FIELD_ID) + NONEXISTING_ID, advice.bookNotFoundHandler(e));
     }
 
 }

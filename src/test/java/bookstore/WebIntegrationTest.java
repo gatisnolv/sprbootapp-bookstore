@@ -110,7 +110,7 @@ public class WebIntegrationTest {
     @Test
     public void postBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
+        BookDTO book = new BookDTO(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
                 .accept(MediaTypes.HAL_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(book))
@@ -128,7 +128,7 @@ public class WebIntegrationTest {
     @Test
     public void postBookWithNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Book book = new Book(null, null, null, null);
+        BookDTO book = new BookDTO(null, null, null, null);
         mockMvc.perform(post(AGGREGATE_ROOT_INFIX + "/")
                 .content(objectMapper.writeValueAsString(book))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -185,7 +185,7 @@ public class WebIntegrationTest {
     @Test
     public void replaceBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
+        BookDTO book = new BookDTO(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -203,7 +203,7 @@ public class WebIntegrationTest {
     @Test
     public void replaceNonExistingBookWithNonNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Book book = new Book(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
+        BookDTO book = new BookDTO(TITLE, AUTHOR, PUBLISHER, PUBLICATION_DATE);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + NONEXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -216,7 +216,7 @@ public class WebIntegrationTest {
     @Test
     public void replaceBookWithAllNullFields() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Book book = new Book(null, null, null, null);
+        BookDTO book = new BookDTO(null, null, null, null);
         mockMvc.perform(put(AGGREGATE_ROOT_INFIX + "/" + EXISTING_ID)
                 .content(objectMapper.writeValueAsString(book))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

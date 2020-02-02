@@ -1,5 +1,6 @@
 package bookstore;
 
+import static bookstore.WebIntegrationTest.ALL_FIELDS_NULL_EXCEPTION_MESSAGE;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -13,7 +14,7 @@ public class AllFieldsNullAdviceTest {
     public void test() {
         AllFieldsNullAdvice advice = new AllFieldsNullAdvice();
         AllFieldsNullException e = new AllFieldsNullException();
-        assertEquals(WebIntegrationTest.ALL_FIELDS_NULL_EXCEPTION_MESSAGE, advice.allFieldsNullHandler(e));
+        assertEquals(ALL_FIELDS_NULL_EXCEPTION_MESSAGE, advice.allFieldsNullHandler(e));
     }
 
 }
